@@ -318,7 +318,7 @@ public class ProtectEcology extends ModelTask {
 
     public static JSONArray queryTreeItemsForExchange(String applyActions, String itemTypes) {
         try {
-            JSONObject jo = new JSONObject(ProtectEcologyRpcCall.queryTreeItemsForExchange(applyActions, itemTypes));
+            JSONObject jo = new JSONObject(ProtectTreeRpcCall.queryTreeItemsForExchange(applyActions, itemTypes));
             if (MessageUtil.checkResultCode(TAG, jo)) {
                 return jo.getJSONArray("treeItems");
             }
