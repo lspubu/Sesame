@@ -3,16 +3,11 @@ package io.github.lazyimmortal.sesame.model.testRpc;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Objects;
 
 import io.github.lazyimmortal.sesame.data.TokenConfig;
 import io.github.lazyimmortal.sesame.hook.Toast;
-import io.github.lazyimmortal.sesame.model.task.antForest.AntForestRpcCall;
-import io.github.lazyimmortal.sesame.model.task.antDodo.AntDodoRpcCall;
-import io.github.lazyimmortal.sesame.model.task.antOrchard.AntOrchardRpcCall;
 import io.github.lazyimmortal.sesame.model.task.antSports.AntSportsRpcCall;
 import io.github.lazyimmortal.sesame.util.*;
 import io.github.lazyimmortal.sesame.util.idMap.UserIdMap;
@@ -35,40 +30,23 @@ public class TestRpc {
 
             @Override
             public void run() {
-                if ("sendAntdodoAllCard".equals(testType)) {
-                    sendAntdodoCard(broadcastFun, broadcastData, true);
+                try {
+                    Class<?> clazz = Class.forName("io.github.lazyimmortal.sesame.model.testRpc.TestRpcAlpha");
+                    clazz.getMethod("handleTestRpc", String.class, String.class, String.class).invoke(null, testType, broadcastFun, broadcastData);
+                } catch (Exception ignored) {
                 }
-                if ("sendAntdodoOneSetCard".equals(testType)) {
-                    sendAntdodoCard(broadcastFun, broadcastData, false);
-                }
-
-                if ("sendAntdodoOneWholeSetCard".equals(testType)) {
-                    sendAntdodoOneWholeSetCard(broadcastFun, broadcastData);
-                }
-                if ("getNewTreeItems".equals(testType)) {
-                    getNewTreeItems();
-                }
-
-                if ("collectHistoryAnimal".equals(testType)) {
-                    collectHistoryAnimal();
-                }
-
-                if ("getWateringLeftTimes".equals(testType)) {
-                    getWateringLeftTimes();
-                }
-                if ("getTreeItems".equals(testType)) {
+                if (Objects.equals("getTreeItems", testType)) {
                     getTreeItems();
                 }
-                if ("batchHireAnimalRecommend".equals(testType)) {
-                    batchHireAnimalRecommend();
+                if (Objects.equals("getNewTreeItems", testType)) {
+                    getNewTreeItems();
                 }
-                if ("queryAreaTrees".equals(testType)) {
+                if (Objects.equals("queryAreaTrees", testType)) {
                     queryAreaTrees();
                 }
-                if ("getUnlockTreeItems".equals(testType)) {
+                if (Objects.equals("getUnlockTreeItems", testType)) {
                     getUnlockTreeItems();
                 }
-
                 if (Objects.equals("setCustomWalkPathId", testType)) {
                     setCustomWalkPathId(broadcastData);
                 }
@@ -82,125 +60,6 @@ public class TestRpc {
                 }
             }
         }.setData(broadcastFun, broadcastData, testType).start();
-    }
-
-    private static void sendAntdodoCard(String bookIdInfo, String targetUser, boolean sendAll) {
-        try {
-            JSONObject jo = new JSONObject(bookIdInfo);
-            JSONArray bookIdList = jo.getJSONArray("bookIdList");
-            for (int i = 0; i < bookIdList.length(); i++) {
-                JSONObject bookInfo = bookIdList.getJSONObject(i);
-                if (sendAll) {
-                    sendAntdodoAllCard(bookInfo.getString("bookId"), targetUser);
-                } else {
-                    sendAntdodoOneSetCard(bookInfo.getString("bookId"), targetUser);
-                }
-            }
-        } catch (Throwable th) {
-            Log.i(TAG, "sendAntdodoCard err:");
-            Log.printStackTrace(TAG, th);
-        }
-    }
-
-    private static void sendAntdodoAllCard(String bookId, String targetUser) {
-        try {
-            JSONObject jo = new JSONObject(AntDodoRpcCall.queryBookInfo(bookId));
-            if ("SUCCESS".equals(jo.getString("resultCode"))) {
-                JSONArray animalForUserList = jo.getJSONObject("data").optJSONArray("animalForUserList");
-                for (int i = 0; i < animalForUserList.length(); i++) {
-                    JSONObject animalForUser = animalForUserList.getJSONObject(i);
-                    int count = animalForUser.getJSONObject("collectDetail").optInt("count");
-                    if (count <= 0)
-                        continue;
-                    JSONObject animal = animalForUser.getJSONObject("animal");
-                    String animalId = animal.getString("animalId");
-                    String ecosystem = animal.getString("ecosystem");
-                    String name = animal.getString("name");
-                    for (int j = 0; j < count; j++) {
-                        jo = new JSONObject(AntDodoRpcCall.social(animalId, targetUser));
-                        if ("SUCCESS".equals(jo.getString("resultCode"))) {
-                            Log.forest("赠送卡片🦕[" + UserIdMap.getMaskName(targetUser) + "]#" + ecosystem + "-" + name);
-                        } else {
-                            Log.i(TAG, jo.getString("resultDesc"));
-                        }
-                        Thread.sleep(500L);
-                    }
-                }
-            }
-        } catch (Throwable th) {
-            Log.i(TAG, "sendAntdodoAllCard err:");
-            Log.printStackTrace(TAG, th);
-        }
-    }
-
-    private static void sendAntdodoOneSetCard(String bookId, String targetUser) {
-        try {
-            JSONObject jo = new JSONObject(AntDodoRpcCall.queryBookInfo(bookId));
-            if ("SUCCESS".equals(jo.getString("resultCode"))) {
-                JSONArray animalForUserList = jo.getJSONObject("data").optJSONArray("animalForUserList");
-                for (int i = 0; i < animalForUserList.length(); i++) {
-                    JSONObject animalForUser = animalForUserList.getJSONObject(i);
-                    int count = animalForUser.getJSONObject("collectDetail").optInt("count");
-                    if (count <= 0)
-                        continue;
-                    JSONObject animal = animalForUser.getJSONObject("animal");
-                    String animalId = animal.getString("animalId");
-                    String ecosystem = animal.getString("ecosystem");
-                    String name = animal.getString("name");
-                    jo = new JSONObject(AntDodoRpcCall.social(animalId, targetUser));
-                    if ("SUCCESS".equals(jo.getString("resultCode"))) {
-                        Log.forest("赠送卡片🦕[" + UserIdMap.getMaskName(targetUser) + "]#" + ecosystem + "-" + name);
-                    } else {
-                        Log.i(TAG, jo.getString("resultDesc"));
-                    }
-                    Thread.sleep(500L);
-                }
-            }
-        } catch (Throwable th) {
-            Log.i(TAG, "sendAntdodoOneSetCard err:");
-            Log.printStackTrace(TAG, th);
-        }
-    }
-
-    private static void sendAntdodoOneWholeSetCard(String bookId, String targetUser) {
-        try {
-            JSONObject jo = new JSONObject(AntDodoRpcCall.queryBookInfo(bookId));
-            if ("SUCCESS".equals(jo.getString("resultCode"))) {
-                JSONArray animalForUserList = jo.getJSONObject("data").optJSONArray("animalForUserList");
-                for (int i = 0; i < animalForUserList.length(); i++) {
-                    JSONObject animalForUser = animalForUserList.getJSONObject(i);
-                    int count = animalForUser.getJSONObject("collectDetail").optInt("count");
-                    if (count <= 0)
-                        return;
-                }
-                for (int j = 0; j < animalForUserList.length(); j++) {
-                    JSONObject animalForUser = animalForUserList.getJSONObject(j);
-                    JSONObject animal = animalForUser.getJSONObject("animal");
-                    String animalId = animal.getString("animalId");
-                    String ecosystem = animal.getString("ecosystem");
-                    String name = animal.getString("name");
-                    jo = new JSONObject(AntDodoRpcCall.social(animalId, targetUser));
-                    if ("SUCCESS".equals(jo.getString("resultCode"))) {
-                        Log.forest("赠送卡片🦕[" + UserIdMap.getMaskName(targetUser) + "]#" + ecosystem + "-" + name);
-                    } else {
-                        Log.i(TAG, jo.getString("resultDesc"));
-                    }
-                    Thread.sleep(500L);
-
-                }
-            }
-        } catch (Throwable th) {
-            Log.i(TAG, "sendAntdodoOneWholeSetCard err:");
-            Log.printStackTrace(TAG, th);
-        }
-    }
-
-    public static String queryEnvironmentCertDetailList(String alias, int pageNum, String targetUserID) {
-        return TestRpcCall.queryEnvironmentCertDetailList(alias, pageNum, targetUserID);
-    }
-
-    public static String sendTree(String certificateId, String friendUserId) {
-        return TestRpcCall.sendTree(certificateId, friendUserId);
     }
 
     private static void getNewTreeItems() {
@@ -257,83 +116,6 @@ public class TestRpc {
         }
     }
 
-    private static void collectHistoryAnimal() {
-        try {
-            String s = AntForestRpcCall.exchangeBenefit("SP20230518000022", "SK20230518000062");
-            JSONObject jo = new JSONObject(s);
-            if ("SUCCESS".equals(jo.getString("resultCode"))) {
-                antdodoPropList();
-            } else {
-                Log.record(jo.getString("resultDesc") + s);
-            }
-        } catch (Throwable t) {
-            Log.i(TAG, "collectHistoryAnimal err:");
-            Log.printStackTrace(TAG, t);
-        }
-    }
-
-    private static void antdodoPropList() {
-        try {
-            JSONObject jo = new JSONObject(AntDodoRpcCall.propList());
-            if ("SUCCESS".equals(jo.getString("resultCode"))) {
-                JSONArray propList = jo.getJSONObject("data").optJSONArray("propList");
-                for (int i = 0; i < propList.length(); i++) {
-                    JSONObject prop = propList.getJSONObject(i);
-                    String propType = prop.getString("propType");
-                    if ("COLLECT_HISTORY_ANIMAL_7_DAYS".equals(propType)) {
-                        JSONArray propIdList = prop.getJSONArray("propIdList");
-                        String propId = propIdList.getString(0);
-                        String propName = prop.getJSONObject("propConfig").getString("propName");
-                        int holdsNum = prop.optInt("holdsNum", 0);
-                        jo = new JSONObject(AntDodoRpcCall.consumeProp(propId, propType));
-                        if ("SUCCESS".equals(jo.getString("resultCode"))) {
-                            JSONObject useResult = jo.getJSONObject("data").getJSONObject("useResult");
-                            JSONObject animal = useResult.getJSONObject("animal");
-                            String ecosystem = animal.getString("ecosystem");
-                            String name = animal.getString("name");
-                            Log.forest("使用道具🎭[" + propName + "]#" + ecosystem + "-" + name);
-                            if (holdsNum > 1) {
-                                Thread.sleep(1000L);
-                                antdodoPropList();
-                                return;
-                            }
-                        } else {
-                            Log.record(jo.getString("resultDesc") + jo.toString());
-                        }
-                    }
-                }
-            }
-        } catch (Throwable th) {
-            Log.i(TAG, "antdodoPropList err:");
-            Log.printStackTrace(TAG, th);
-        }
-    }
-
-    private static void getWateringLeftTimes() {
-        try {
-            JSONObject jo = new JSONObject(AntOrchardRpcCall.orchardIndex());
-            if ("100".equals(jo.getString("resultCode"))) {
-                String taobaoData = jo.getString("taobaoData");
-                jo = new JSONObject(taobaoData);
-                JSONObject plantInfo = jo.getJSONObject("gameInfo").getJSONObject("plantInfo");
-                /*
-                 * boolean canExchange = plantInfo.getBoolean("canExchange");
-                 * if (canExchange) {
-                 * Log.farm("农场果树似乎可以兑换了！");
-                 * return;
-                 * }
-                 */
-                JSONObject accountInfo = jo.getJSONObject("gameInfo").getJSONObject("accountInfo");
-                int wateringLeftTimes = accountInfo.getInt("wateringLeftTimes");
-                Log.farm("今日剩余施肥次数[" + wateringLeftTimes + "]");
-            }
-        } catch (Throwable t) {
-            Log.i(TAG, "getWateringLeftTimes err:");
-            Log.printStackTrace(TAG, t);
-        }
-    }
-
-
     private static void getTreeItems() {
         try {
             String s = TestRpcCall.queryTreeItemsForExchange("AVAILABLE,ENERGY_LACK");
@@ -347,7 +129,7 @@ public class TestRpc {
                     String projectId = jo.getString("itemId");
                     String itemName = jo.getString("itemName");
                     getTreeCurrentBudget(projectId, itemName);
-                    Thread.sleep(100);
+                    TimeUtil.sleep(100);
                 }
             } else {
                 Log.i(TAG, jo.getString("resultDesc"));
@@ -372,39 +154,6 @@ public class TestRpc {
             }
         } catch (Throwable t) {
             Log.i(TAG, "queryTreeForExchange err:");
-            Log.printStackTrace(TAG, t);
-        }
-    }
-
-    private static void batchHireAnimalRecommend() {
-        try {
-            JSONObject jo = new JSONObject(AntOrchardRpcCall.batchHireAnimalRecommend(UserIdMap.getCurrentUid()));
-            if ("100".equals(jo.getString("resultCode"))) {
-                JSONArray recommendGroupList = jo.optJSONArray("recommendGroupList");
-                if (recommendGroupList != null && recommendGroupList.length() > 0) {
-                    List<String> GroupList = new ArrayList<>();
-                    for (int i = 0; i < recommendGroupList.length(); i++) {
-                        jo = recommendGroupList.getJSONObject(i);
-                        String animalUserId = jo.getString("animalUserId");
-                        int earnManureCount = jo.getInt("earnManureCount");
-                        String groupId = jo.getString("groupId");
-                        String orchardUserId = jo.getString("orchardUserId");
-                        GroupList.add("{\"animalUserId\":\"" + animalUserId + "\",\"earnManureCount\":"
-                                + earnManureCount + ",\"groupId\":\"" + groupId + "\",\"orchardUserId\":\""
-                                + orchardUserId + "\"}");
-                    }
-                    if (!GroupList.isEmpty()) {
-                        jo = new JSONObject(AntOrchardRpcCall.batchHireAnimal(GroupList));
-                        if ("100".equals(jo.getString("resultCode"))) {
-                            Log.farm("一键捉鸡🐣[除草]");
-                        }
-                    }
-                }
-            } else {
-                Log.record(jo.getString("resultDesc") + jo.toString());
-            }
-        } catch (Throwable t) {
-            Log.i(TAG, "batchHireAnimalRecommend err:");
             Log.printStackTrace(TAG, t);
         }
     }
