@@ -13,7 +13,7 @@ import io.github.lazyimmortal.sesame.util.*;
 import io.github.lazyimmortal.sesame.util.idMap.UserIdMap;
 
 public class TestRpc {
-    private static final String TAG = "TestRpc";
+    private static final String TAG = TestRpc.class.getSimpleName();
 
     public static void start(String broadcastFun, String broadcastData, String testType) {
         new Thread() {
@@ -62,8 +62,9 @@ public class TestRpc {
 
     private static Boolean handleTestRpc(String type, String fun, String data) {
         try {
-            Class<?> clazz = Class.forName("io.github.lazyimmortal.sesame.model.testRpc.TestRpcAlpha");
-            return (Boolean) clazz.getMethod("handleTestRpc", String.class, String.class, String.class).invoke(null, type, fun, data);
+            return (Boolean) Class.forName("io.github.lazyimmortal.sesame.model.testRpc.TestRpcAlpha")
+                    .getMethod("handleTestRpc", String.class, String.class, String.class)
+                    .invoke(null, type, fun, data);
         } catch (Exception e) {
             return false;
         }
