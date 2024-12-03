@@ -33,6 +33,15 @@ public class CustomOption extends IdAndName {
         return list;
     }
 
+    public static List<CustomOption> getAntDodoPropList() {
+        List<CustomOption> list = new ArrayList<>();
+        list.add(new CustomOption("COLLECT_TIMES_7_DAYS", "抽卡道具"));
+        list.add(new CustomOption("COLLECT_HISTORY_ANIMAL_7_DAYS", "历史图鉴随机卡道具"));
+        list.add(new CustomOption("COLLECT_TO_FRIEND_TIMES_7_DAYS", "抽好友卡道具"));
+        list.add(new CustomOption("UNIVERSAL_CARD_7_DAYS", "万能卡道具"));
+        return list;
+    }
+
     public static List<CustomOption> getAntInsuranceOptions() {
         List<CustomOption> list = new ArrayList<>();
         list.add(new CustomOption("beanSignIn", "安心豆签到"));
