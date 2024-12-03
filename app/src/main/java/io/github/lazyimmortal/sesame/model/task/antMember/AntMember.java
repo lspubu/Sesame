@@ -12,7 +12,7 @@ import io.github.lazyimmortal.sesame.entity.CustomOption;
 import io.github.lazyimmortal.sesame.entity.MemberBenefit;
 import io.github.lazyimmortal.sesame.entity.PromiseSimpleTemplate;
 import io.github.lazyimmortal.sesame.model.base.TaskCommon;
-import io.github.lazyimmortal.sesame.model.testRpc.TestRpc;
+import io.github.lazyimmortal.sesame.model.extend.ExtendHandle;
 import io.github.lazyimmortal.sesame.util.*;
 import io.github.lazyimmortal.sesame.util.idMap.MemberBenefitIdMap;
 import io.github.lazyimmortal.sesame.util.idMap.PromiseSimpleTemplateIdMap;
@@ -200,7 +200,7 @@ public class AntMember extends ModelTask {
                     if (Objects.equals("BROWSE", type)) {
                         doubleCheck = doBrowseTask(taskList);
                     } else {
-                        TestRpc.handleTestRpc("doAntMemberMoreTask", type, taskList.toString());
+                        ExtendHandle.handleAlphaRequest("doAntMemberMoreTask", type, taskList.toString());
                     }
                 }
                 if (doubleCheck) {

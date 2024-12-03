@@ -1,6 +1,5 @@
 package io.github.lazyimmortal.sesame.model.task.antFarm;
 
-import io.github.lazyimmortal.sesame.model.testRpc.TestRpc;
 import lombok.Getter;
 
 import org.json.JSONArray;
@@ -16,6 +15,7 @@ import io.github.lazyimmortal.sesame.entity.AlipayUser;
 import io.github.lazyimmortal.sesame.entity.CustomOption;
 import io.github.lazyimmortal.sesame.entity.FarmOrnaments;
 import io.github.lazyimmortal.sesame.model.base.TaskCommon;
+import io.github.lazyimmortal.sesame.model.extend.ExtendHandle;
 import io.github.lazyimmortal.sesame.model.normal.answerAI.AnswerAI;
 import io.github.lazyimmortal.sesame.rpc.intervallimit.RpcIntervalLimit;
 import io.github.lazyimmortal.sesame.util.*;
@@ -2197,7 +2197,7 @@ public class AntFarm extends ModelTask {
     }
 
     private void family() {
-        TestRpc.handleTestRpc("doAntFamilyTask", "", "");
+        ExtendHandle.handleAlphaRequest("doAntFamilyTask", "", "");
         try {
             JSONObject jo = enterFamily();
             if (jo == null) {

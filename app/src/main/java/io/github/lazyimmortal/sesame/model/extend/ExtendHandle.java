@@ -1,4 +1,4 @@
-package io.github.lazyimmortal.sesame.model.testRpc;
+package io.github.lazyimmortal.sesame.model.extend;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -9,61 +9,47 @@ import io.github.lazyimmortal.sesame.data.TokenConfig;
 import io.github.lazyimmortal.sesame.hook.Toast;
 import io.github.lazyimmortal.sesame.model.task.antSports.AntSportsRpcCall;
 import io.github.lazyimmortal.sesame.model.task.protectEcology.ProtectTreeRpcCall;
-import io.github.lazyimmortal.sesame.util.*;
+import io.github.lazyimmortal.sesame.util.Log;
+import io.github.lazyimmortal.sesame.util.MessageUtil;
+import io.github.lazyimmortal.sesame.util.StringUtil;
+import io.github.lazyimmortal.sesame.util.TimeUtil;
 import io.github.lazyimmortal.sesame.util.idMap.UserIdMap;
 
-public class TestRpc {
-    private static final String TAG = TestRpc.class.getSimpleName();
+public class ExtendHandle {
+    private static final String TAG = ExtendHandle.class.getSimpleName();
 
-    public static void start(String broadcastFun, String broadcastData, String testType) {
-        new Thread() {
-            String broadcastFun;
-            String broadcastData;
-            String testType;
-
-            public Thread setData(String fun, String data, String type) {
-                broadcastFun = fun;
-                broadcastData = data;
-                testType = type;
-                return this;
-            }
-
-            @Override
-            public void run() {
-                if (handleTestRpc(testType, broadcastFun, broadcastData)) {
-                    return;
-                }
-                switch (testType) {
-                    case "getTreeItems":
-                        getTreeItems();
-                        break;
-                    case "getNewTreeItems":
-                        getNewTreeItems();
-                        break;
-                    case "queryAreaTrees":
-                        queryAreaTrees();
-                        break;
-                    case "getUnlockTreeItems":
-                        getUnlockTreeItems();
-                        break;
-                    case "setCustomWalkPathId":
-                        setCustomWalkPathId(broadcastData);
-                        break;
-                    case "addCustomWalkPathIdQueue":
-                        addCustomWalkPathIdQueue(broadcastData);
-                        break;
-                    case "clearCustomWalkPathIdQueue":
-                        clearCustomWalkPathIdQueue();
-                        break;
-                }
-            }
-        }.setData(broadcastFun, broadcastData, testType).start();
+    public static void handleRequest(String type, String fun, String data) {
+        if (handleAlphaRequest(type, fun, data)) {
+            return;
+        }
+        switch (type) {
+            case "getTreeItems":
+                getTreeItems();
+                break;
+            case "getNewTreeItems":
+                getNewTreeItems();
+                break;
+            case "queryAreaTrees":
+                queryAreaTrees();
+                break;
+            case "getUnlockTreeItems":
+                getUnlockTreeItems();
+                break;
+            case "setCustomWalkPathId":
+                setCustomWalkPathId(data);
+                break;
+            case "addCustomWalkPathIdQueue":
+                addCustomWalkPathIdQueue(data);
+                break;
+            case "clearCustomWalkPathIdQueue":
+                clearCustomWalkPathIdQueue();
+                break;
+        }
     }
-
-    public static Boolean handleTestRpc(String type, String fun, String data) {
+    public static Boolean handleAlphaRequest(String type, String fun, String data) {
         try {
-            return (Boolean) Class.forName("io.github.lazyimmortal.sesame.model.testRpc.TestRpcAlpha")
-                    .getMethod("handleTestRpc", String.class, String.class, String.class)
+            return (Boolean) Class.forName("io.github.lazyimmortal.sesame.model.extend.ExtendHandleAlpha")
+                    .getMethod("handleAlphaRequest", String.class, String.class, String.class)
                     .invoke(null, type, fun, data);
         } catch (Exception e) {
             return false;
