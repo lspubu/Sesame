@@ -4,7 +4,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Iterator;
-import java.util.Objects;
 
 import io.github.lazyimmortal.sesame.data.TokenConfig;
 import io.github.lazyimmortal.sesame.hook.Toast;
@@ -30,36 +29,43 @@ public class TestRpc {
 
             @Override
             public void run() {
-                try {
-                    Class<?> clazz = Class.forName("io.github.lazyimmortal.sesame.model.testRpc.TestRpcAlpha");
-                    clazz.getMethod("handleTestRpc", String.class, String.class, String.class).invoke(null, testType, broadcastFun, broadcastData);
-                } catch (Exception ignored) {
+                if (handleTestRpc(testType, broadcastFun, broadcastData)) {
+                    return;
                 }
-                if (Objects.equals("getTreeItems", testType)) {
-                    getTreeItems();
-                }
-                if (Objects.equals("getNewTreeItems", testType)) {
-                    getNewTreeItems();
-                }
-                if (Objects.equals("queryAreaTrees", testType)) {
-                    queryAreaTrees();
-                }
-                if (Objects.equals("getUnlockTreeItems", testType)) {
-                    getUnlockTreeItems();
-                }
-                if (Objects.equals("setCustomWalkPathId", testType)) {
-                    setCustomWalkPathId(broadcastData);
-                }
-                if (Objects.equals("addCustomWalkPathIdQueue", testType)) {
-                    addCustomWalkPathIdQueue(broadcastData);
-                }
-                if (Objects.equals("clearCustomWalkPathIdQueue", testType)) {
-                    if (TokenConfig.clearCustomWalkPathIdQueue()) {
-                        Toast.show("清除待行走路线成功");
-                    }
+                switch (testType) {
+                    case "getTreeItems":
+                        getTreeItems();
+                        break;
+                    case "getNewTreeItems":
+                        getNewTreeItems();
+                        break;
+                    case "queryAreaTrees":
+                        queryAreaTrees();
+                        break;
+                    case "getUnlockTreeItems":
+                        getUnlockTreeItems();
+                        break;
+                    case "setCustomWalkPathId":
+                        setCustomWalkPathId(broadcastData);
+                        break;
+                    case "addCustomWalkPathIdQueue":
+                        addCustomWalkPathIdQueue(broadcastData);
+                        break;
+                    case "clearCustomWalkPathIdQueue":
+                        clearCustomWalkPathIdQueue();
+                        break;
                 }
             }
         }.setData(broadcastFun, broadcastData, testType).start();
+    }
+
+    private static Boolean handleTestRpc(String type, String fun, String data) {
+        try {
+            Class<?> clazz = Class.forName("io.github.lazyimmortal.sesame.model.testRpc.TestRpcAlpha");
+            return (Boolean) clazz.getMethod("handleTestRpc", String.class, String.class, String.class).invoke(null, type, fun, data);
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     private static void getNewTreeItems() {
@@ -240,6 +246,12 @@ public class TestRpc {
             if (TokenConfig.addCustomWalkPathIdQueue(pathId)) {
                 Toast.show("添加待行走路线成功:" + pathName);
             }
+        }
+    }
+
+    private static void clearCustomWalkPathIdQueue() {
+        if (TokenConfig.clearCustomWalkPathIdQueue()) {
+            Toast.show("清除待行走路线成功");
         }
     }
 }
