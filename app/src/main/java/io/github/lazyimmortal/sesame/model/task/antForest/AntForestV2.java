@@ -43,9 +43,29 @@ public class AntForestV2 extends ModelTask {
 
     private static final AverageMath offsetTimeMath = new AverageMath(5);
 
+    private static final Map<String, Long> usingProps = new ConcurrentHashMap<>();
+
+    private static final Map<String, String> dressMap;
+
     private static final Set<String> AntForestTaskTypeSet;
 
     static {
+        dressMap = new HashMap<>();
+        // position To positionType
+        dressMap.put("tree__main", "treeMain");
+        dressMap.put("bg__sky_0", "bgSky0");
+        dressMap.put("bg__sky_cloud", "bgSkyCloud");
+        dressMap.put("bg__ground_a", "bgGroundA");
+        dressMap.put("bg__ground_b", "bgGroundB");
+        dressMap.put("bg__ground_c", "bgGroundC");
+        // positionType To position
+        dressMap.put("treeMain", "tree__main");
+        dressMap.put("bgSky0", "bg__sky_0");
+        dressMap.put("bgSkyCloud", "bg__sky_cloud");
+        dressMap.put("bgGroundA", "bg__ground_a");
+        dressMap.put("bgGroundB", "bg__ground_b");
+        dressMap.put("bgGroundC", "bg__ground_c");
+
         AntForestTaskTypeSet = new HashSet<>();
         AntForestTaskTypeSet.add("VITALITYQIANDAOPUSH"); //
         AntForestTaskTypeSet.add("ONE_CLICK_WATERING_V1");// 给随机好友一键浇水
@@ -75,8 +95,6 @@ public class AntForestV2 extends ModelTask {
     private FixedOrRangeIntervalLimit collectIntervalEntity;
 
     private FixedOrRangeIntervalLimit doubleCollectIntervalEntity;
-
-    private final Map<String, Long> usingProps = new ConcurrentHashMap<>();
 
     private final AverageMath delayTimeMath = new AverageMath(5);
 
@@ -2508,7 +2526,7 @@ public class AntForestV2 extends ModelTask {
                 if (jo.has(position)) {
                     batchType = jo.getString(position);
                 }
-                if (queryUserDressForBackpack(positionToPositionType(position), batchType)) {
+                if (queryUserDressForBackpack(dressMap.get(position), batchType)) {
                     isDressExchanged = true;
                 }
             }
@@ -2543,7 +2561,7 @@ public class AntForestV2 extends ModelTask {
             }
 
             if (!batchType.isEmpty()) {
-                removeDressDetail(positionTypeToPosition(positionType));
+                removeDressDetail(dressMap.get(positionType));
                 Log.forest("装扮保护🔐皮肤过期,芝麻粒已为你恢复默认!");
             }
             return isTakeOff;
@@ -2574,56 +2592,6 @@ public class AntForestV2 extends ModelTask {
             Log.printStackTrace(TAG, th);
         }
         return false;
-    }
-
-    private String positionToPositionType(String position) {
-        String[] positions = {
-                "tree__main",
-                "bg__sky_0",
-                "bg__sky_cloud",
-                "bg__ground_a",
-                "bg__ground_b",
-                "bg__ground_c"
-        };
-        String[] positionTypes = {
-                "treeMain",
-                "bgSky0",
-                "bgSkyCloud",
-                "bgGroundA",
-                "bgGroundB",
-                "bgGroundC"
-        };
-        for (int i = 0; i < positionTypes.length; i++) {
-            if (positions[i].equals(position)) {
-                return positionTypes[i];
-            }
-        }
-        return null;
-    }
-
-    private String positionTypeToPosition(String positionType) {
-        String[] positions = {
-                "tree__main",
-                "bg__sky_0",
-                "bg__sky_cloud",
-                "bg__ground_a",
-                "bg__ground_b",
-                "bg__ground_c"
-        };
-        String[] positionTypes = {
-                "treeMain",
-                "bgSky0",
-                "bgSkyCloud",
-                "bgGroundA",
-                "bgGroundB",
-                "bgGroundC"
-        };
-        for (int i = 0; i < positionTypes.length; i++) {
-            if (positionTypes[i].equals(positionType)) {
-                return positions[i];
-            }
-        }
-        return null;
     }
 
     /**
