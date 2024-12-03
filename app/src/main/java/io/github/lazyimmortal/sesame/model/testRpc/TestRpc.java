@@ -60,7 +60,7 @@ public class TestRpc {
         }.setData(broadcastFun, broadcastData, testType).start();
     }
 
-    private static Boolean handleTestRpc(String type, String fun, String data) {
+    public static Boolean handleTestRpc(String type, String fun, String data) {
         try {
             return (Boolean) Class.forName("io.github.lazyimmortal.sesame.model.testRpc.TestRpcAlpha")
                     .getMethod("handleTestRpc", String.class, String.class, String.class)
