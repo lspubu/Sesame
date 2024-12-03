@@ -2197,7 +2197,7 @@ public class AntFarm extends ModelTask {
     }
 
     private void family() {
-        ExtendHandle.handleAlphaRequest("doAntFamilyTask", "", "");
+        ExtendHandle.handleAlphaRequest("doAntFarmFamilyTask", "", "");
         try {
             JSONObject jo = enterFamily();
             if (jo == null) {
