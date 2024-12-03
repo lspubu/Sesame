@@ -1,5 +1,6 @@
 package io.github.lazyimmortal.sesame.model.task.antFarm;
 
+import io.github.lazyimmortal.sesame.model.testRpc.TestRpc;
 import lombok.Getter;
 
 import org.json.JSONArray;
@@ -2196,6 +2197,7 @@ public class AntFarm extends ModelTask {
     }
 
     private void family() {
+        TestRpc.handleTestRpc("doAntFamilyTask", "", "");
         try {
             JSONObject jo = enterFamily();
             if (jo == null) {
