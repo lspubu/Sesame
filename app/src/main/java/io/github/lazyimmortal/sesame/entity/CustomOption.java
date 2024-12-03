@@ -24,7 +24,7 @@ public class CustomOption extends IdAndName {
         return list;
     }
 
-    public static List<CustomOption> getFarmFamilyOptions() {
+    public static List<CustomOption> getAntFarmFamilyOptions() {
         List<CustomOption> list = new ArrayList<>();
         list.add(new CustomOption("familySign", "每日签到"));
         list.add(new CustomOption("familyFeed", "帮喂成员"));
