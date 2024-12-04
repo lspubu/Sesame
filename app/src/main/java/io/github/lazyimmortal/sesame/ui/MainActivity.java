@@ -385,13 +385,8 @@ public class MainActivity extends BaseActivity {
 
     private void goSettingActivity(int index) {
         UserEntity userEntity = userEntityArray[index];
-        boolean isOpenNewUI = AppConfig.INSTANCE.getNewUI() && !"TEST".equals(ViewAppInfo.getAppVersion());
-        try {
-            System.loadLibrary("sesame");
-        } catch (Exception e) {
-            isOpenNewUI = false;
-        }
-        Intent intent = new Intent(this, isOpenNewUI ? NewSettingsActivity.class : SettingsActivity.class);
+        boolean isNewUI = AppConfig.INSTANCE.getNewUI() && !"TEST".equals(ViewAppInfo.getAppVersion()) && LibraryUtil.loadLibrary("sesame");
+        Intent intent = new Intent(this, isNewUI ? NewSettingsActivity.class : SettingsActivity.class);
         if (userEntity != null) {
             intent.putExtra("userId", userEntity.getUserId());
             intent.putExtra("userName", userEntity.getShowName());
