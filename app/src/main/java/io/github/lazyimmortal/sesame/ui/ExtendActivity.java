@@ -18,6 +18,7 @@ public class ExtendActivity extends BaseActivity {
     Button btnQueryAreaTrees, btnGetUnlockTreeItems;
     Button btnSetCustomWalkPathId, btnSetCustomWalkPathIdQueue;
     Button btnCollectHistoryAnimal;
+    Button btnDeveloperMode;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -31,6 +32,7 @@ public class ExtendActivity extends BaseActivity {
         btnSetCustomWalkPathId = findViewById(R.id.btn_set_custom_walk_path_id);
         btnSetCustomWalkPathIdQueue = findViewById(R.id.btn_set_custom_walk_path_id_queue);
         btnCollectHistoryAnimal = findViewById(R.id.btn_collect_history_animal);
+        btnDeveloperMode = findViewById(R.id.btn_developer_mode);
 
 
         btnGetTreeItems.setOnClickListener(new View.OnClickListener() {
@@ -99,6 +101,17 @@ public class ExtendActivity extends BaseActivity {
                     }).setNegativeButton(getString(R.string.clear_custom_walk_path_id_queue), (dialog, which) -> {
                         sendItemsBroadcast("clearCustomWalkPathIdQueue", "", "");
                     }).show();
+        });
+
+        btnDeveloperMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    startActivity(new Intent(ExtendActivity.this, Class.forName("io.github.lazyimmortal.sesame.ui.AlphaActivity")));
+                } catch (Exception e) {
+                    Toast.makeText(ExtendActivity.this, "不符合开启资格！", Toast.LENGTH_SHORT).show();
+                }
+            }
         });
     }
 

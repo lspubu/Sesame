@@ -7,6 +7,7 @@
     <string name="collect_history_animal">收集历史物种🦕</string>
     <string name="set_custom_walk_path_id">自定义路线🚶🏻‍♂️</string>
     <string name="set_custom_walk_path_id_queue">待行走路线🚶🏻‍♂️</string>
+    <string name="developer_mode">开发者模式💻</string>
 
     <string name="update_custom_walk_path_id">修改</string>
     <string name="clear_custom_walk_path_id">清除</string>
