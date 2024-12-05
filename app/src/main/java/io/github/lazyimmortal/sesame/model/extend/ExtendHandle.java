@@ -215,6 +215,10 @@ public class ExtendHandle {
                 pageStart += 9;
                 JSONArray bookForUserList = jo.getJSONArray("bookForUserList");
                 for (int i = 0; i < bookForUserList.length(); i++) {
+                    if (i == 0 && pageStart == 9) {
+                        // 忽略当前专辑
+                        continue;
+                    }
                     jo = bookForUserList.getJSONObject(i);
                     if (!AntDodo.MedalGenerationStatus.CAN_NOT_GENERATE.name().equals(
                             jo.optString("medalGenerationStatus"))) {
