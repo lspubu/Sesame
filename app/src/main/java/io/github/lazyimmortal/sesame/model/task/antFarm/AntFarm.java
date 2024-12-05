@@ -1323,6 +1323,9 @@ public class AntFarm extends ModelTask {
             JSONObject jo = new JSONObject(AntFarmRpcCall.feedFriendAnimal(friendFarmId, groupId)
             );
             if (!MessageUtil.checkMemo(TAG, jo)) {
+                if (Objects.equals("391", jo.optString("resultCode"))) {
+                    Status.flagToday("farm::feedFriendAnimalLimit");
+                }
                 return false;
             }
             int feedFood = foodStock - jo.getInt("foodStock");
