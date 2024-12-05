@@ -1287,29 +1287,54 @@ public class AntFarm extends ModelTask {
         }
     }
 
-    private void feedFriendAnimal(String friendFarmId, String user) {
+    private void feedFriendAnimal(String friendFarmId) {
         try {
-            Log.record("[" + user + "]的小鸡在挨饿");
+            String userId = AntFarmRpcCall.farmId2UserId(friendFarmId);
+            String maskName = UserIdMap.getMaskName(userId);
+            Log.record("[" + maskName + "]的小鸡在挨饿");
             if (foodStock < 180) {
                 Log.record("喂鸡饲料不足");
                 checkUnReceiveTaskAward();
-            }
-            if (foodStock >= 180) {
-                JSONObject jo = new JSONObject(AntFarmRpcCall.feedFriendAnimal(friendFarmId));
-                if (!MessageUtil.checkMemo(TAG, jo)) {
+                if (foodStock < 180) {
                     return;
                 }
-                int feedFood = foodStock - jo.getInt("foodStock");
-                if (feedFood > 0) {
-                    add2FoodStock(-feedFood);
-                    Log.farm("帮喂小鸡🥣帮喂[" + user + "]小鸡[" + feedFood + "g饲料]#剩余" + foodStock + "g");
-                    Status.feedFriendToday(AntFarmRpcCall.farmId2UserId(friendFarmId));
+            }
+            String groupId = null;
+            if (family.getValue()) {
+                groupId = getFamilyGroupId(userId);
+                if (StringUtil.isEmpty(groupId) || !Objects.equals(ownerGroupId, groupId)) {
+                    groupId = null;
                 }
+            }
+            if (feedFriendAnimal(friendFarmId, groupId)) {
+                String s = StringUtil.isEmpty(groupId) ? "帮喂小鸡🥣帮喂好友" : "亲密家庭🏠帮喂成员";
+                s = s + "[" + maskName + "]" + "的小鸡#剩余[" + foodStock + "g饲料]";
+                Log.farm(s);
+                Status.feedFriendToday(AntFarmRpcCall.farmId2UserId(friendFarmId));
             }
         } catch (Throwable t) {
             Log.i(TAG, "feedFriendAnimal err:");
             Log.printStackTrace(TAG, t);
         }
+    }
+
+    private Boolean feedFriendAnimal(String friendFarmId, String groupId) {
+        try {
+            JSONObject jo = new JSONObject(AntFarmRpcCall.feedFriendAnimal(friendFarmId, groupId)
+            );
+            if (!MessageUtil.checkMemo(TAG, jo)) {
+                return false;
+            }
+            int feedFood = foodStock - jo.getInt("foodStock");
+            if (feedFood > 0) {
+                add2FoodStock(-feedFood);
+                return true;
+            }
+        } catch (Throwable t) {
+            Log.i(TAG, "feedFriendAnimal err:");
+            Log.printStackTrace(TAG, t);
+        }
+        return false;
     }
 
     private void notifyFriend() {
@@ -2219,19 +2244,19 @@ public class AntFarm extends ModelTask {
             for (int i = 0; i < familyAnimals.length(); i++) {
                 jo = familyAnimals.getJSONObject(i);
                 String animalId = jo.getString("animalId");
-                friendUserIds.put(jo.getString("userId"));
+                String userId = jo.getString("userId");
+                friendUserIds.put(userId);
                 if (animalId.equals(ownerAnimal.animalId)) {
                     continue;
                 }
                 String farmId = jo.getString("farmId");
-                String userId = jo.getString("userId");
                 JSONObject animalStatusVO = jo.getJSONObject("animalStatusVO");
                 String animalFeedStatus = animalStatusVO.getString("animalFeedStatus");
                 String animalInteractStatus = animalStatusVO.getString("animalInteractStatus");
                 if (AnimalInteractStatus.HOME.name().equals(animalInteractStatus)
                         && AnimalFeedStatus.HUNGRY.name().equals(animalFeedStatus)) {
                     if (familyOptions.getValue().contains("familyFeed")) {
-                        familyFeedFriendAnimal(ownerGroupId, farmId, userId);
+                        feedFriendAnimal(farmId);
                     }
                 }
             }
@@ -2312,31 +2337,6 @@ public class AntFarm extends ModelTask {
             Log.printStackTrace(TAG, t);
         }
         return false;
-    }
-
-    private void familyFeedFriendAnimal(String groupId, String friendFarmId, String friendUserId) {
-        String user = UserIdMap.getMaskName(friendUserId);
-        Log.record("亲密家庭🏠成员[" + user + "]的小鸡在挨饿");
-        if (foodStock < 180) {
-            Log.record("喂鸡饲料不足");
-            checkUnReceiveTaskAward();
-        }
-        if (foodStock < 180) {
-            return;
-        }
-        try {
-            JSONObject jo = new JSONObject(AntFarmRpcCall.familyFeedFriendAnimal(groupId, friendFarmId));
-            if (!MessageUtil.checkMemo(TAG, jo)) {
-                return;
-            }
-            foodStock = jo.getInt("foodStock");
-            Log.farm("亲密家庭🏠帮喂成员[" + user + "]小鸡[" + 180 + "g饲料]#剩余" + foodStock + "g");
-            Status.feedFriendToday(AntFarmRpcCall.farmId2UserId(friendFarmId));
-            syncFamilyStatus(groupId);
-        } catch (Throwable t) {
-            Log.i(TAG, "familyFeedFriendAnimal err:");
-            Log.printStackTrace(TAG, t);
-        }
     }
 
     private void familyAwardList() {
