@@ -260,7 +260,7 @@ public class MainActivity extends BaseActivity {
         menu.add(0, 7, 7, R.string.import_the_statistic_file);
         menu.add(0, 8, 8, R.string.view_debug);
         menu.add(0, 9, 9, R.string.view_record);
-        menu.add(0, 10, 10, R.string.extend);
+        menu.add(0, 10, 10, R.string.extend_options);
         menu.add(0, 11, 11, R.string.settings);
         return super.onCreateOptionsMenu(menu);
     }
