@@ -324,14 +324,6 @@ public class FileUtil {
         return cityCodeFile;
     }
 
-    public static File getAntDodoPropFile() {
-        File antDodoPropFile = new File(MAIN_DIRECTORY_FILE, "antDodoProp.json");
-        if (antDodoPropFile.exists() && antDodoPropFile.isDirectory()) {
-            antDodoPropFile.delete();
-        }
-        return antDodoPropFile;
-    }
-
     public static File getRuntimeLogFile() {
         File runtimeLogFile = new File(LOG_DIRECTORY_FILE, Log.getLogFileName("runtime"));
         if (runtimeLogFile.exists() && runtimeLogFile.isDirectory()) {
