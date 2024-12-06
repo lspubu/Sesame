@@ -2102,14 +2102,14 @@ public class AntForestV2 extends ModelTask {
             JSONObject animalProp = null;
             for (int i = 0; i < animalProps.length(); i++) {
                 jo = animalProps.getJSONObject(i);
-                if (animalProp == null
-                        || jo.getJSONObject("main").getInt("holdsNum") > animalProp.getJSONObject("main")
-                        .getInt("holdsNum")) {
+                if (i == 0) {
+                    animalProp = jo;
+                    if (sequenceAnimalProp.getValue()) {
+                        break;
+                    }
+                } else if (jo.getJSONObject("main").getInt("holdsNum") > animalProp.getJSONObject("main").getInt("holdsNum")) {
                     animalProp = jo;
                 }
-            }
-            if (sequenceAnimalProp.getValue()) {
-                animalProp = animalProps.getJSONObject(0);
             }
             consumeAnimalProp(animalProp);
         } catch (Throwable t) {
