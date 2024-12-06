@@ -2726,7 +2726,7 @@ public class AntForestV2 extends ModelTask {
         int SEQUENCE = 1;
         int QUANTITY = 2;
 
-        String[] nickName = {"不派遣动物", "按默认顺序派遣", "按最大数量派遣"};
+        String[] nickNames = {"不派遣动物", "按默认顺序派遣", "按最大数量派遣"};
     }
 
     public interface UsePropType {
