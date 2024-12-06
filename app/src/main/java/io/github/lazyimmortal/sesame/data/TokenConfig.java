@@ -46,11 +46,15 @@ public class TokenConfig {
     // ecoLife
     private final Set<Map<String, String> > dishImageList = new HashSet<>();
 
-    public static String getCustomWalkPathId(String userId) {
+    public static String getCustomWalkPathId(Set<String> customWalkPathIdListSet) {
         String pathId = INSTANCE.customWalkPathIdQueue.poll();
         if (pathId != null) {
             save();
             return pathId;
+        }
+        List<String> list = new ArrayList<>(customWalkPathIdListSet);
+        if (!list.isEmpty()) {
+            return list.get(RandomUtil.nextInt(0, list.size() - 1));
         }
         return null;
     }
