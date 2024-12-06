@@ -17,7 +17,6 @@ public class ExtendActivity extends BaseActivity {
     Button btnGetTreeItems, btnGetNewTreeItems;
     Button btnQueryAreaTrees, btnGetUnlockTreeItems;
     Button btnSetCustomWalkPathId, btnSetCustomWalkPathIdQueue;
-    Button btnCollectHistoryAnimal;
     Button btnDeveloperMode;
 
     @Override
@@ -31,7 +30,6 @@ public class ExtendActivity extends BaseActivity {
         btnGetUnlockTreeItems = findViewById(R.id.btn_get_unlock_treeItems);
         btnSetCustomWalkPathId = findViewById(R.id.btn_set_custom_walk_path_id);
         btnSetCustomWalkPathIdQueue = findViewById(R.id.btn_set_custom_walk_path_id_queue);
-        btnCollectHistoryAnimal = findViewById(R.id.btn_collect_history_animal);
         btnDeveloperMode = findViewById(R.id.btn_developer_mode);
 
 
@@ -64,13 +62,6 @@ public class ExtendActivity extends BaseActivity {
             public void onClick(View view) {
                 sendItemsBroadcast("getUnlockTreeItems", "", "");
                 Toast.makeText(ExtendActivity.this, "已发送查询请求，请在森林日志查看结果！", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        btnCollectHistoryAnimal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sendItemsBroadcast("collectHistoryAnimal", "", "");
             }
         });
 
