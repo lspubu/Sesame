@@ -11,15 +11,16 @@
     <string name="runtime_log">Runtime log</string>
     <string name="unactivated">UNACTIVATED</string>
     <string name="tips">Tips</string>
+    <string name="btn_understood">I see</string>
     <string name="hide_the_application_icon">Hide the application icon</string>
     <string name="view_error_log_file">View error log file</string>
     <string name="export_error_log_file">Export error log file</string>
     <string name="export_runtime_log_file">Export all log file</string>
+    <string name="view_runtime_log_file">View runtime log file</string>
     <string name="export_the_statistic_file">Export the statistic file</string>
     <string name="import_the_statistic_file">Import the statistic file</string>
-    <string name="view_all_log_file">View runtime log file</string>
-    <string name="view_debug">View debug</string>
-    <string name="view_record">View record</string>
+    <string name="view_debug_file">View debug file</string>
+    <string name="view_record_file">View record file</string>
     <string name="extend_options">Extend options</string>
     <string name="settings">Settings</string>
 </resources>
