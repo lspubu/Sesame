@@ -28,7 +28,7 @@ public class ExtendActivity extends BaseActivity {
         btnGetNewTreeItems = findViewById(R.id.btn_get_newTree_items);
         btnQueryAreaTrees = findViewById(R.id.btn_query_area_trees);
         btnGetUnlockTreeItems = findViewById(R.id.btn_get_unlock_treeItems);
-        btnSetCustomWalkPathId = findViewById(R.id.btn_set_custom_walk_path_id);
+        btnSetCustomWalkPathId = findViewById(R.id.btn_set_custom_walk_path_id_list);
         btnSetCustomWalkPathIdQueue = findViewById(R.id.btn_set_custom_walk_path_id_queue);
         btnDeveloperMode = findViewById(R.id.btn_developer_mode);
 
@@ -68,25 +68,25 @@ public class ExtendActivity extends BaseActivity {
         btnSetCustomWalkPathId.setOnClickListener(v -> {
             Context context = ExtendActivity.this;
             EditText input = new EditText(context);
+            input.setHint(R.string.input_custom_walk_path_id);
 
             new AlertDialog.Builder(context)
-                    .setTitle(getString(R.string.set_custom_walk_path_id))
+                    .setTitle(R.string.set_custom_walk_path_id_list)
                     .setView(input)
-                    .setPositiveButton(getString(R.string.update_custom_walk_path_id), (dialog, which) -> {
+                    .setPositiveButton(R.string.add_custom_walk_path_id, (dialog, which) -> {
                         String text = input.getText().toString().trim();
-                        sendItemsBroadcast("setCustomWalkPathId", "setCustomWalkPathId", text);
-                    }).setNegativeButton(getString(R.string.clear_custom_walk_path_id), (dialog, which) -> {
-                        sendItemsBroadcast("setCustomWalkPathId", "clearCustomWalkPathId", "");
+                        sendItemsBroadcast("setCustomWalkPathIdList", "addCustomWalkPathId", text);
                     }).show();
         });
         btnSetCustomWalkPathIdQueue.setOnClickListener(v -> {
             Context context = ExtendActivity.this;
             EditText input = new EditText(context);
+            input.setHint(R.string.input_custom_walk_path_id);
 
             new AlertDialog.Builder(context)
-                    .setTitle(getString(R.string.set_custom_walk_path_id_queue))
+                    .setTitle(R.string.set_custom_walk_path_id_queue)
                     .setView(input)
-                    .setPositiveButton(getString(R.string.add_custom_walk_path_id_queue), (dialog, which) -> {
+                    .setPositiveButton(R.string.add_custom_walk_path_id, (dialog, which) -> {
                         String text = input.getText().toString().trim();
                         sendItemsBroadcast("addCustomWalkPathIdQueue", "", text);
                     }).setNegativeButton(getString(R.string.clear_custom_walk_path_id_queue), (dialog, which) -> {

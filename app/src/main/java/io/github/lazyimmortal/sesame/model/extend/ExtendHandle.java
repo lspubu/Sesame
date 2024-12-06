@@ -4,20 +4,16 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Iterator;
-import java.util.Objects;
 
 import io.github.lazyimmortal.sesame.data.TokenConfig;
 import io.github.lazyimmortal.sesame.hook.Toast;
-import io.github.lazyimmortal.sesame.model.task.antDodo.AntDodo;
-import io.github.lazyimmortal.sesame.model.task.antDodo.AntDodoRpcCall;
-import io.github.lazyimmortal.sesame.model.task.antForest.AntForestV2;
 import io.github.lazyimmortal.sesame.model.task.antSports.AntSportsRpcCall;
 import io.github.lazyimmortal.sesame.model.task.protectEcology.ProtectTreeRpcCall;
 import io.github.lazyimmortal.sesame.util.Log;
 import io.github.lazyimmortal.sesame.util.MessageUtil;
 import io.github.lazyimmortal.sesame.util.StringUtil;
 import io.github.lazyimmortal.sesame.util.TimeUtil;
-import io.github.lazyimmortal.sesame.util.idMap.UserIdMap;
+import io.github.lazyimmortal.sesame.util.idMap.WalkPathIdMap;
 
 public class ExtendHandle {
     private static final String TAG = ExtendHandle.class.getSimpleName();
@@ -39,8 +35,8 @@ public class ExtendHandle {
             case "getUnlockTreeItems":
                 getUnlockTreeItems();
                 break;
-            case "setCustomWalkPathId":
-                setCustomWalkPathId(data);
+            case "setCustomWalkPathIdList":
+                addCustomWalkPathIdList(data);
                 break;
             case "addCustomWalkPathIdQueue":
                 addCustomWalkPathIdQueue(data);
@@ -195,23 +191,17 @@ public class ExtendHandle {
         }
     }
 
-    private static void setCustomWalkPathId(String pathId) {
-        String userId = UserIdMap.getCurrentUid();
-        if (StringUtil.isEmpty(userId)) {
-            Toast.show("设置自定义路线失败:找不到用户信息");
-            return;
-        }
-        String pathName = "自定义路线关闭";
+    private static void addCustomWalkPathIdList(String pathId) {
         if (!StringUtil.isEmpty(pathId)) {
-            pathName = AntSportsRpcCall.queryPathName(pathId);
+            String pathName = AntSportsRpcCall.queryPathName(pathId);
             if (pathName == null) {
-                Toast.show("设置自定义路线失败:找不到路线信息");
+                Toast.show("添加自定义路线列表失败:找不到路线信息");
                 return;
             }
-        }
-        String userMaskName = UserIdMap.getCurrentMaskName();
-        if (TokenConfig.setCustomWalkPathId(userId, pathId)) {
-            Toast.show("设置自定义路线成功:" + pathName + "-->" + userMaskName);
+            WalkPathIdMap.load();
+            WalkPathIdMap.add(pathId, pathName);
+            WalkPathIdMap.save();
+            Toast.show("添加自定义路线列表成功:" + pathName);
         }
     }
 
@@ -219,18 +209,18 @@ public class ExtendHandle {
         if (!StringUtil.isEmpty(pathId)) {
             String pathName = AntSportsRpcCall.queryPathName(pathId);
             if (pathName == null) {
-                Toast.show("添加待行走路线失败:找不到路线信息");
+                Toast.show("添加待行走路线队列失败:找不到路线信息");
                 return;
             }
             if (TokenConfig.addCustomWalkPathIdQueue(pathId)) {
-                Toast.show("添加待行走路线成功:" + pathName);
+                Toast.show("添加待行走路线队列成功:" + pathName);
             }
         }
     }
 
     private static void clearCustomWalkPathIdQueue() {
         if (TokenConfig.clearCustomWalkPathIdQueue()) {
-            Toast.show("清除待行走路线成功");
+            Toast.show("清除待行走路线队列成功");
         }
     }
 }

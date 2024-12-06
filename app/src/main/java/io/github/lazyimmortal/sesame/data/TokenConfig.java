@@ -38,7 +38,6 @@ public class TokenConfig {
     private boolean init;
 
     // sports
-    private final Map<String, String> customWalkPathIdList = new HashMap<>();
     private final Queue<String> customWalkPathIdQueue = new LinkedList<>();
 
     // farm
@@ -53,17 +52,7 @@ public class TokenConfig {
             save();
             return pathId;
         }
-        return INSTANCE.customWalkPathIdList.get(userId);
-    }
-
-    public static Boolean setCustomWalkPathId(String userId, String pathId) {
-        TokenConfig tokenConfig = INSTANCE;
-        if (StringUtil.isEmpty(pathId)) pathId = null;
-        if (!Objects.equals(tokenConfig.customWalkPathIdList.get(userId), pathId)) {
-            tokenConfig.customWalkPathIdList.put(userId, pathId);
-            return save();
-        }
-        return true;
+        return null;
     }
 
     public static Boolean addCustomWalkPathIdQueue(String pathId) {
