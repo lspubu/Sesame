@@ -16,12 +16,10 @@ public class WalkPath extends IdAndName {
     }
 
     public static List<WalkPath> getList() {
-        if (list == null) {
-            list = new ArrayList<>();
-            Set<Map.Entry<String, String>> idSet = WalkPathIdMap.getMap().entrySet();
-            for (Map.Entry<String, String> entry : idSet) {
-                list.add(new WalkPath(entry.getKey(), entry.getValue()));
-            }
+        list = new ArrayList<>();
+        Set<Map.Entry<String, String>> idSet = WalkPathIdMap.getMap().entrySet();
+        for (Map.Entry<String, String> entry : idSet) {
+            list.add(new WalkPath(entry.getKey(), entry.getValue()));
         }
         return list;
     }
