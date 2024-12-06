@@ -2166,35 +2166,6 @@ public class AntForestV2 extends ModelTask {
         }
     }
 
-    // 旧版 派遣动物
-    private boolean AnimalConsumeProp(int animalId) {
-        try {
-            JSONObject jo = new JSONObject(AntForestRpcCall.queryAnimalAndPiece(animalId));
-            if ("SUCCESS".equals(jo.getString("resultCode"))) {
-                JSONArray animalProps = jo.getJSONArray("animalProps");
-                jo = animalProps.getJSONObject(0);
-                String name = jo.getJSONObject("animal").getString("name");
-                JSONObject main = jo.getJSONObject("main");
-                String propGroup = main.getString("propGroup");
-                String propType = main.getString("propType");
-                String propId = main.getJSONArray("propIdList").getString(0);
-                jo = new JSONObject(AntForestRpcCall.AnimalConsumeProp(propGroup, propId, propType));
-                if ("SUCCESS".equals(jo.getString("resultCode"))) {
-                    Log.forest("巡护派遣🐆[" + name + "]");
-                    return true;
-                } else {
-                    Log.i(TAG, jo.getString("resultDesc"));
-                }
-            } else {
-                Log.i(TAG, jo.getString("resultDesc"));
-            }
-        } catch (Throwable t) {
-            Log.i(TAG, "queryAnimalAndPiece err:");
-            Log.printStackTrace(TAG, t);
-        }
-        return false;
-    }
-
     private void combineAnimalPiece(int animalId) {
         try {
             do {
