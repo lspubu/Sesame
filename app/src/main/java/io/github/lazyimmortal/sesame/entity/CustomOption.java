@@ -44,7 +44,7 @@ public class CustomOption extends IdAndName {
 
     public static List<CustomOption> getAntDodoBookMedalOptions() {
         List<CustomOption> list = new ArrayList<>();
-        list.add(new CustomOption("generateBookMedal", "自动合成勋章"));
+        list.add(new CustomOption("generateBookMedal", "自动合成图鉴勋章"));
         list.add(new CustomOption("collectHistoryAnimal", "自动收集历史物种"));
         return list;
     }
