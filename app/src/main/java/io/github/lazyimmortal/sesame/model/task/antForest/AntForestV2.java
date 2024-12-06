@@ -1382,22 +1382,13 @@ public class AntForestV2 extends ModelTask {
     }
 
     private void forestExtend() {
-        try {
-            if (ExtendHandle.handleAlphaRequest("forestExtend", "useMoreProp", "boost|shield")) {
-                if (bubbleBoostType.getValue() != UsePropType.CLOSE) {
-                    Class.forName("io.github.lazyimmortal.sesame.model.task.antForest.AntForestAlpha")
-                            .getMethod("addUsePropTask", String.class, List.class, int.class)
-                            .invoke(null, PropGroup.boost.name(), bubbleBoostTime.getValue(), bubbleBoostType.getValue());
-                }
-                if (energyShieldType.getValue() != UsePropType.CLOSE) {
-                    Class.forName("io.github.lazyimmortal.sesame.model.task.antForest.AntForestAlpha")
-                            .getMethod("addUsePropTask", String.class, Long.class, int.class)
-                            .invoke(null, PropGroup.shield.name(), usingProps.get(PropGroup.shield.name()), (int) energyShieldType.getValue());
-                }
+        if (ExtendHandle.handleAlphaRequest("forestExtend", "useMoreProp", "boost|shield")) {
+            if (bubbleBoostType.getValue() != UsePropType.CLOSE) {
+                ExtendHandle.handleAlphaRequest("boost", bubbleBoostType.getConfigValue(), bubbleBoostTime.getConfigValue());
             }
-        } catch (Throwable t) {
-            Log.i(TAG, "forestExtend err:");
-            Log.printStackTrace(TAG, t);
+            if (energyShieldType.getValue() != UsePropType.CLOSE) {
+                ExtendHandle.handleAlphaRequest("shield", energyShieldType.getConfigValue(), String.valueOf(usingProps.get(PropGroup.shield.name())));
+            }
         }
     }
 
