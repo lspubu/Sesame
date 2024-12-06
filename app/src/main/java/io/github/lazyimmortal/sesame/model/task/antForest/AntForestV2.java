@@ -145,8 +145,7 @@ public class AntForestV2 extends ModelTask {
     private BooleanModelField medicalHealth;
     private BooleanModelField greenLife;
     private BooleanModelField combineAnimalPiece;
-    private BooleanModelField consumeAnimalProp;
-    private BooleanModelField sequenceAnimalProp;
+    private ChoiceModelField consumeAnimalPropType;
     private SelectModelField whoYouWantToGiveTo;
     private BooleanModelField ecoLife;
     private SelectModelField ecoLifeOptions;
@@ -213,8 +212,7 @@ public class AntForestV2 extends ModelTask {
         modelFields.addField(giveEnergyRainList = new SelectModelField("giveEnergyRainList", "赠送能量雨好友列表", new LinkedHashSet<>(), AlipayUser::getList));
         modelFields.addField(userPatrol = new BooleanModelField("userPatrol", "保护地巡护", false));
         modelFields.addField(combineAnimalPiece = new BooleanModelField("combineAnimalPiece", "合成动物碎片", false));
-        modelFields.addField(consumeAnimalProp = new BooleanModelField("consumeAnimalProp", "派遣动物伙伴", false));
-        modelFields.addField(sequenceAnimalProp = new BooleanModelField("sequenceAnimalProp", "动物伙伴顺序", false));
+        modelFields.addField(consumeAnimalPropType = new ChoiceModelField("consumeAnimalPropType", "派遣动物伙伴", ConsumeAnimalPropType.NONE, ConsumeAnimalPropType.nickNames));
         modelFields.addField(receiveForestTaskAward = new BooleanModelField("receiveForestTaskAward", "森林任务", false));
         modelFields.addField(collectGiftBox = new BooleanModelField("collectGiftBox", "领取礼盒", false));
         modelFields.addField(medicalHealth = new BooleanModelField("medicalHealth", "医疗健康", false));
@@ -446,7 +444,7 @@ public class AntForestV2 extends ModelTask {
                 if (combineAnimalPiece.getValue()) {
                     queryAnimalAndPiece();
                 }
-                if (consumeAnimalProp.getValue()) {
+                if (consumeAnimalPropType.getValue() != ConsumeAnimalPropType.NONE) {
                     if (!canConsumeAnimalProp) {
                         Log.record("已经有动物伙伴在巡护森林");
                     } else {
@@ -2104,7 +2102,7 @@ public class AntForestV2 extends ModelTask {
                 jo = animalProps.getJSONObject(i);
                 if (i == 0) {
                     animalProp = jo;
-                    if (sequenceAnimalProp.getValue()) {
+                    if (consumeAnimalPropType.getValue() == ConsumeAnimalPropType.SEQUENCE) {
                         break;
                     }
                 } else if (jo.getJSONObject("main").getInt("holdsNum") > animalProp.getJSONObject("main").getInt("holdsNum")) {
@@ -2720,6 +2718,15 @@ public class AntForestV2 extends ModelTask {
 
         String[] nickNames = {"不复活能量", "复活已选好友", "复活未选好友"};
 
+    }
+
+    public interface ConsumeAnimalPropType {
+
+        int NONE = 0;
+        int SEQUENCE = 1;
+        int QUANTITY = 2;
+
+        String[] nickName = {"不派遣动物", "按默认顺序派遣", "按最大数量派遣"};
     }
 
     public interface UsePropType {
