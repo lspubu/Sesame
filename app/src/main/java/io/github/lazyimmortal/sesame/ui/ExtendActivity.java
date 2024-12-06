@@ -68,12 +68,12 @@ public class ExtendActivity extends BaseActivity {
         btnSetCustomWalkPathId.setOnClickListener(v -> {
             Context context = ExtendActivity.this;
             EditText input = new EditText(context);
-            input.setHint(R.string.input_custom_walk_path_id);
+            input.setHint(R.string.msg_input_custom_walk_path_id);
 
             new AlertDialog.Builder(context)
                     .setTitle(R.string.set_custom_walk_path_id_list)
                     .setView(input)
-                    .setPositiveButton(R.string.add_custom_walk_path_id, (dialog, which) -> {
+                    .setPositiveButton(R.string.btn_add_custom_walk_path_id, (dialog, which) -> {
                         String text = input.getText().toString().trim();
                         sendItemsBroadcast("setCustomWalkPathIdList", "addCustomWalkPathId", text);
                     }).show();
@@ -81,15 +81,15 @@ public class ExtendActivity extends BaseActivity {
         btnSetCustomWalkPathIdQueue.setOnClickListener(v -> {
             Context context = ExtendActivity.this;
             EditText input = new EditText(context);
-            input.setHint(R.string.input_custom_walk_path_id);
+            input.setHint(R.string.msg_input_custom_walk_path_id);
 
             new AlertDialog.Builder(context)
                     .setTitle(R.string.set_custom_walk_path_id_queue)
                     .setView(input)
-                    .setPositiveButton(R.string.add_custom_walk_path_id, (dialog, which) -> {
+                    .setPositiveButton(R.string.btn_add_custom_walk_path_id, (dialog, which) -> {
                         String text = input.getText().toString().trim();
                         sendItemsBroadcast("addCustomWalkPathIdQueue", "", text);
-                    }).setNegativeButton(getString(R.string.clear_custom_walk_path_id_queue), (dialog, which) -> {
+                    }).setNegativeButton(getString(R.string.btn_clear_custom_walk_path_id_queue), (dialog, which) -> {
                         sendItemsBroadcast("clearCustomWalkPathIdQueue", "", "");
                     }).show();
         });
