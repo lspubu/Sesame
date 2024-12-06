@@ -190,7 +190,7 @@ public class AntForestV2 extends ModelTask {
         modelFields.addField(doubleCardOnlyLimitTime = new BooleanModelField("doubleCardOnlyLimitTime", "双击卡 | 仅使用限时双击卡", false));
         modelFields.addField(stealthCard = new BooleanModelField("stealthCard", "隐身卡 | 使用", false));
         modelFields.addField(stealthCardConstant = new BooleanModelField("stealthCardConstant", "隐身卡 | 限时隐身永动机", false));
-        if (ExtendHandle.handleAlphaRequest("forestExtendOptions", "useMoreProp", "boost|shield")) {
+        if (ExtendHandle.handleAlphaRequest("enableDeveloperMode")) {
             modelFields.addField(bubbleBoostType = new ChoiceModelField("bubbleBoostType", "加速器 | 定时使用", UsePropType.CLOSE, UsePropType.nickNames));
             modelFields.addField(bubbleBoostTime = new ListModelField.ListJoinCommaToStringModelField("bubbleBoostTime", "加速器 | 定时使用时间", ListUtil.newArrayList("0630")));
             modelFields.addField(energyShieldType = new ChoiceModelField("energyShieldType", "保护罩 | 接力使用", UsePropType.CLOSE, UsePropType.nickNames));
@@ -1382,7 +1382,7 @@ public class AntForestV2 extends ModelTask {
     }
 
     private void forestExtend() {
-        if (ExtendHandle.handleAlphaRequest("forestExtend", "useMoreProp", "boost|shield")) {
+        if (ExtendHandle.handleAlphaRequest("enableDeveloperMode", "forest", "boost|shield")) {
             if (bubbleBoostType.getValue() != UsePropType.CLOSE) {
                 ExtendHandle.handleAlphaRequest("boost", bubbleBoostType.getConfigValue(), bubbleBoostTime.getConfigValue());
             }
