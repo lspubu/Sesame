@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="get_tree_items">Get_tree_items🌱</string>
-    <string name="get_newTree_items">Get_newTree_items🌱</string>
+    <string name="get_tree_items">Get tree items🌱</string>
+    <string name="get_newTree_items">Get newTree items🌱</string>
     <string name="query_area_trees">Query unlock area🗺️</string>
     <string name="get_unlock_treeItems">Query unlock item🐘</string>
     <string name="set_custom_walk_path_id_list">Set custom walk pathId list🚶🏻‍♂️</string>
