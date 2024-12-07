@@ -1382,7 +1382,7 @@ public class AntForestV2 extends ModelTask {
     }
 
     private void forestExtend() {
-        if (ExtendHandle.handleAlphaRequest("enableDeveloperMode", "forest", "boost|shield")) {
+        if (ExtendHandle.handleAlphaRequest("antForest", "vitality")) {
             if (bubbleBoostType.getValue() != UsePropType.CLOSE) {
                 ExtendHandle.handleAlphaRequest("boost", bubbleBoostType.getConfigValue(), bubbleBoostTime.getConfigValue());
             }
