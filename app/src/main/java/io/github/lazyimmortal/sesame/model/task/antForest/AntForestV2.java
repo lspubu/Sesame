@@ -1382,13 +1382,26 @@ public class AntForestV2 extends ModelTask {
     }
 
     private void forestExtend() {
-        if (ExtendHandle.handleAlphaRequest("antForest", "vitality")) {
-            if (bubbleBoostType.getValue() != UsePropType.CLOSE) {
-                ExtendHandle.handleAlphaRequest("boost", bubbleBoostType.getConfigValue(), bubbleBoostTime.getConfigValue());
-            }
-            if (energyShieldType.getValue() != UsePropType.CLOSE) {
-                ExtendHandle.handleAlphaRequest("shield", energyShieldType.getConfigValue(), String.valueOf(usingProps.get(PropGroup.shield.name())));
-            }
+        try {
+            ExtendHandle.handleAlphaRequest(
+                    "antForest",
+                    "bubbleBoost",
+                    new JSONObject()
+                            .put("bubbleBoostType", bubbleBoostType.getConfigValue())
+                            .put("bubbleBoostTime", bubbleBoostTime.getConfigValue())
+                            .toString()
+            );
+            ExtendHandle.handleAlphaRequest(
+                    "antForest",
+                    "energyShield",
+                    new JSONObject()
+                            .put("energyShieldType", energyShieldType.getConfigValue())
+                            .put("energyShield", usingProps.get(PropGroup.shield.name()))
+                            .toString()
+            );
+        } catch (Throwable t) {
+            Log.i(TAG, "forestExtend err:");
+            Log.printStackTrace(TAG, t);
         }
     }
 
