@@ -1386,22 +1386,16 @@ public class AntForestV2 extends ModelTask {
             if (!ExtendHandle.handleAlphaRequest("antForest", "vitality")) {
                 return;
             }
-            ExtendHandle.handleAlphaRequest(
-                    "antForest",
-                    "bubbleBoost",
+            JSONObject jo = new JSONObject();
+            jo.put("bubbleBoost",
                     new JSONObject()
                             .put("bubbleBoostType", bubbleBoostType.getValue())
-                            .put("bubbleBoostTime", bubbleBoostTime.getValue())
-                            .toString()
-            );
-            ExtendHandle.handleAlphaRequest(
-                    "antForest",
-                    "energyShield",
+                            .put("bubbleBoostTime", bubbleBoostTime.getValue()));
+            jo.put("energyShield",
                     new JSONObject()
                             .put("energyShieldType", energyShieldType.getValue())
-                            .put("energyShield", usingProps.get(PropGroup.shield.name()))
-                            .toString()
-            );
+                            .put("energyShieldTime", usingProps.get(PropGroup.shield.name())));
+            ExtendHandle.handleAlphaRequest("antForest", "boost|shield", jo.toString());
         } catch (Throwable t) {
             Log.i(TAG, "forestExtend err:");
             Log.printStackTrace(TAG, t);
