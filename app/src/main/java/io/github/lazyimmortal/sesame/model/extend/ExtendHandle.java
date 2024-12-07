@@ -51,6 +51,10 @@ public class ExtendHandle {
         return handleAlphaRequest(type, "", "");
     }
 
+    public static Boolean handleAlphaRequest(String type, String fun) {
+        return handleAlphaRequest(type, fun, "");
+    }
+
     public static Boolean handleAlphaRequest(String type, String fun, String data) {
         try {
             return (Boolean) Class.forName("io.github.lazyimmortal.sesame.model.extend.ExtendHandleAlpha")
