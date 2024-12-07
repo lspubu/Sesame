@@ -1383,6 +1383,9 @@ public class AntForestV2 extends ModelTask {
 
     private void forestExtend() {
         try {
+            if (!ExtendHandle.handleAlphaRequest("antForest", "vitality")) {
+                return;
+            }
             ExtendHandle.handleAlphaRequest(
                     "antForest",
                     "bubbleBoost",
