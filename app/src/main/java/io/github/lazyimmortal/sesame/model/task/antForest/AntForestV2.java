@@ -2100,9 +2100,9 @@ public class AntForestV2 extends ModelTask {
             JSONObject animalProp = null;
             for (int i = 0; i < animalProps.length(); i++) {
                 jo = animalProps.getJSONObject(i);
-                if (i == 0) {
+                if (animalProp == null) {
                     animalProp = jo;
-                    if (consumeAnimalPropType.getValue() == ConsumeAnimalPropType.SEQUENCE && animalProp.has("main") && animalProp.getJSONObject("main").getInt("holdsNum") > 0) {
+                    if (consumeAnimalPropType.getValue() == ConsumeAnimalPropType.SEQUENCE) {
                         break;
                     }
                 } else if (jo.getJSONObject("main").getInt("holdsNum") > animalProp.getJSONObject("main").getInt("holdsNum")) {
