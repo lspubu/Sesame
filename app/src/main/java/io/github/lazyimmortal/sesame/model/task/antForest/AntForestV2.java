@@ -127,7 +127,7 @@ public class AntForestV2 extends ModelTask {
     private BooleanModelField stealthCard;
     private BooleanModelField stealthCardConstant;
     private ChoiceModelField bubbleBoostType;
-    private ListModelField.ListJoinCommaToStringModelField bubbleBoostTime;
+    private StringModelField bubbleBoostTime;
     private ChoiceModelField energyShieldType;
     private ChoiceModelField helpFriendCollectType;
     private SelectModelField helpFriendCollectList;
@@ -192,7 +192,7 @@ public class AntForestV2 extends ModelTask {
         modelFields.addField(stealthCardConstant = new BooleanModelField("stealthCardConstant", "隐身卡 | 限时隐身永动机", false));
         if (ExtendHandle.handleAlphaRequest("enableDeveloperMode")) {
             modelFields.addField(bubbleBoostType = new ChoiceModelField("bubbleBoostType", "加速器 | 定时使用", UsePropType.CLOSE, UsePropType.nickNames));
-            modelFields.addField(bubbleBoostTime = new ListModelField.ListJoinCommaToStringModelField("bubbleBoostTime", "加速器 | 定时使用时间", ListUtil.newArrayList("0630")));
+            modelFields.addField(bubbleBoostTime = new StringModelField("bubbleBoostTime", "加速器 | 定时使用时间", "0630"));
             modelFields.addField(energyShieldType = new ChoiceModelField("energyShieldType", "保护罩 | 接力使用", UsePropType.CLOSE, UsePropType.nickNames));
         }
         modelFields.addField(returnWater10 = new IntegerModelField("returnWater10", "返水 | 10克需收能量(关闭:0)", 0));
@@ -1390,15 +1390,15 @@ public class AntForestV2 extends ModelTask {
                     "antForest",
                     "bubbleBoost",
                     new JSONObject()
-                            .put("bubbleBoostType", bubbleBoostType.getConfigValue())
-                            .put("bubbleBoostTime", bubbleBoostTime.getConfigValue())
+                            .put("bubbleBoostType", bubbleBoostType.getValue())
+                            .put("bubbleBoostTime", bubbleBoostTime.getValue())
                             .toString()
             );
             ExtendHandle.handleAlphaRequest(
                     "antForest",
                     "energyShield",
                     new JSONObject()
-                            .put("energyShieldType", energyShieldType.getConfigValue())
+                            .put("energyShieldType", energyShieldType.getValue())
                             .put("energyShield", usingProps.get(PropGroup.shield.name()))
                             .toString()
             );
